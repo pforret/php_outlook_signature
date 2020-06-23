@@ -1,17 +1,21 @@
 {
-    "name": "spatie/:package_name",
-    "description": ":package_description",
+    "name": "pforret/php_outlook_signature",
+    "description": "Create Outlook email signatures from a template",
     "keywords": [
-        "spatie",
-        ":package_name"
+        "pforret",
+        "outlook",
+        "email",
+        "signature",
+        "windows",
+        "php_outlook_signature"
     ],
-    "homepage": "https://github.com/spatie/:package_name",
+    "homepage": "https://github.com/pforret/php_outlook_signature",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": ":author_email",
-            "homepage": "https://spatie.be",
+            "name": "Peter Forret",
+            "email": "peter@forret.com",
+            "homepage": "https://github.com/pforret",
             "role": "Developer"
         }
     ],

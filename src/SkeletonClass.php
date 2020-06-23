@@ -1,7 +1,7 @@
 <?php
 
-namespace Spatie\Skeleton;
+namespace Pforret\Outlook;
 
-class SkeletonClass
+class PhpOutlookSignature
 {
 }
