@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Tests;
+namespace Pforret\Outlook\Tests;
 
 use PHPUnit\Framework\TestCase;
 
