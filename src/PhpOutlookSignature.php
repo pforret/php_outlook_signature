@@ -2,8 +2,7 @@
 
 namespace Pforret\Outlook;
 
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use function PHPUnit\Framework\throwException;
+Use Exception;
 
 class PhpOutlookSignature
 {
@@ -19,13 +18,14 @@ class PhpOutlookSignature
     {
         $this->default_template="__DIR__/templates/default";
         if(!file_exists($this->default_template)){
-            throwException(sprintf("Default template folder [%s] does not exist", $this->default_template));
+            throw new Exception(sprintf("Default template folder [%s] does not exist", $this->default_template));
+
         }
         if(!$folder){
             $folder=$this->default_template;
         }
         if(!file_exists($this->template_folder)){
-            throwException(sprintf("Template folder [%s] does not exist", $this->template_folder));
+            throw new Exception(sprintf("Template folder [%s] does not exist", $this->template_folder));
         }
         $this->template_folder = $folder;
         $this->check_template_files($this->template_folder);
@@ -40,10 +40,10 @@ class PhpOutlookSignature
     {
         $html_files=glob("$folder/*.htm");
         if(count($html_files) === 0){
-            throwException(sprintf("Template folder [%s] does not contain a .htm file", $this->template_folder));
+            throw new Exception(sprintf("Template folder [%s] does not contain a .htm file", $this->template_folder));
         }
         if(count($html_files) > 1){
-            throwException(sprintf("Template folder [%s] should only contain 1 .htm file (now: %d)", $this->template_folder,count($html_files)));
+            throw new Exception(sprintf("Template folder [%s] should only contain 1 .htm file (now: %d)", $this->template_folder,count($html_files)));
         }
 
         $this->template_file=$html_files[0];
@@ -51,7 +51,7 @@ class PhpOutlookSignature
         $assets_folder=sprintf("%s/%s",$this->template_folder,"${template_name}_files");
         if(!is_dir($assets_folder)){
             // TODO: look for alternative folder name in template
-            throwException(sprintf("Template assets folder [%s] cannot be found", $assets_folder));
+            throw new Exception(sprintf("Template assets folder [%s] cannot be found", $assets_folder));
             // most probable
         }
         $this->assets_folder=$assets_folder;
@@ -89,7 +89,7 @@ class PhpOutlookSignature
         $text=file_get_contents($this->template_file);
         foreach($this->keywords as $keyword){
             if(!$ignore_errors && !isset($values[$keyword]))
-                throwException("Template expects [$keyword] but none was given");
+                throw new Exception("Template expects [$keyword] but none was given");
             $value=isset($values[$keyword]) ? $values[$keyword] : "";
             $text=str_replace($keyword,$value,$text);
         }
