@@ -1,7 +1,7 @@
 # Create Outlook email signatures from a template
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/pforret/php_outlook_signature.svg?style=flat-square)](https://packagist.org/packages/pforret/php_outlook_signature)
-![Tests](https://github.com/pforret/php_outlook_signature/workflows/Tests/badge.svg)
+[![Tests](https://github.com/pforret/php_outlook_signature/workflows/Tests/badge.svg)](https://github.com/pforret/php_outlook_signature/actions)
 [![Total Downloads](https://img.shields.io/packagist/dt/pforret/php_outlook_signature.svg?style=flat-square)](https://packagist.org/packages/pforret/php_outlook_signature)
 
 
