@@ -20,7 +20,7 @@ class PhpOutlookSignature
     {
         $this->is_ready = false;
         $this->last_error = "";
-        $this->default_template = "__DIR__/templates/default";
+        $this->default_template = __DIR__ . "/templates/default";
         if (! file_exists($this->default_template)) {
             $this->last_error = sprintf("Default template folder [%s] does not exist", $this->default_template);
             throw new Exception(sprintf("Default template folder [%s] does not exist", $this->default_template));

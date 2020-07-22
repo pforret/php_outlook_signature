@@ -17,8 +17,13 @@ composer require pforret/php_outlook_signature
 ## Usage
 
 ```php
-$signature = new Pforret\PhpOutlookSignature\PhpOutlookSignature("<folder template>");
-echo $signature->create($data);
+use Pforret\PhpOutlookSignature\PhpOutlookSignature
+$signature = new PhpOutlookSignature("<folder template>");
+$personal_details=[
+    "person_name"   => "Peter Gibbons",
+    ...
+];
+echo $signature->create($output_file,$personal_details);
 ```
 
 ## Testing
