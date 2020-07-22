@@ -15,7 +15,7 @@ class PhpOutlookSignature
     private array $included_files = [];
     private bool $is_ready = false;
 
-    public function __construct(string $folder = "")
+    public function __construct(string $folder = '')
     {
         $this->is_ready = false;
         $this->default_template = __DIR__ . '/templates/default';
