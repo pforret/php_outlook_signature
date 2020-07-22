@@ -23,6 +23,7 @@ class PhpOutlookSignature
         $this->default_template = "__DIR__/templates/default";
         if (! file_exists($this->default_template)) {
             $this->last_error = sprintf("Default template folder [%s] does not exist", $this->default_template);
+
             throw new Exception(sprintf("Default template folder [%s] does not exist", $this->default_template));
         }
         if (! $folder) {
@@ -77,15 +78,15 @@ class PhpOutlookSignature
         $this->included_files = [];
         $text = file_get_contents($this->template_file);
         $text = str_replace($this->assets_local."/", "{assets}/", $text);
-        preg_match_all("|\{(\w+)\}|", $text, $matches,PREG_SET_ORDER);
+        preg_match_all("|\{(\w+)\}|", $text, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
             $keyword = $match[1];
             $this->keywords[$keyword] = $keyword;
         }
-        preg_match_all("|({assets}/\w+\.\w+)|", $text, $matches,PREG_SET_ORDER);
+        preg_match_all("|({assets}/\w+\.\w+)|", $text, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
             $file = $match[1];
-            $file=str_replace("{assets}",$this->assets_folder,$file);
+            $file = str_replace("{assets}", $this->assets_folder, $file);
             $this->included_files[$file] = $file;
         }
 
@@ -106,7 +107,7 @@ class PhpOutlookSignature
     {
         $output_folder = dirname($output_file);
         $output_name = pathinfo($output_file, PATHINFO_FILENAME);
-        $assets_folder_name="${output_name}_files";
+        $assets_folder_name = "${output_name}_files";
         $assets_folder = "$output_folder/$assets_folder_name";
         if (! file_exists($output_folder)) {
             mkdir($output_folder, 0777, true);
@@ -114,8 +115,8 @@ class PhpOutlookSignature
         if (! file_exists($assets_folder)) {
             mkdir($assets_folder, 0777, true);
         }
-        if(!isset($values["assets"])){
-            $values["assets"]=$assets_folder_name;
+        if (! isset($values["assets"])) {
+            $values["assets"] = $assets_folder_name;
         }
         // fill in template
 
@@ -130,7 +131,7 @@ class PhpOutlookSignature
         // save files
         file_put_contents($output_file, $text);
         foreach ($this->included_files as $file) {
-            $file=str_replace("{assets}",$values["assets"],$file);
+            $file = str_replace("{assets}", $values["assets"], $file);
             $copy_file = "$assets_folder/" . basename($file);
             copy($file, $copy_file);
         }
