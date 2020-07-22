@@ -1,7 +1,7 @@
 # Create Outlook email signatures from a template
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/pforret/php_outlook_signature.svg?style=flat-square)](https://packagist.org/packages/pforret/php_outlook_signature)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/pforret/php_outlook_signature/run-tests?label=tests)](https://github.com/pforrer/php_outlook_signature/actions?query=workflow%3Arun-tests+branch%3Amaster)
+![Tests](https://github.com/pforret/php_outlook_signature/workflows/Tests/badge.svg)
 [![Total Downloads](https://img.shields.io/packagist/dt/pforret/php_outlook_signature.svg?style=flat-square)](https://packagist.org/packages/pforret/php_outlook_signature)
 
 
@@ -16,14 +16,14 @@ composer require pforret/php_outlook_signature
 
 ## Usage
 
-``` php
-$sign = new Pforret\PhpOutlookSignature\PhpOutlookSignature("<folder template>");
-echo $sign->create_signature($data,$template);
+```php
+$signature = new Pforret\PhpOutlookSignature\PhpOutlookSignature("<folder template>");
+echo $signature->create($data);
 ```
 
 ## Testing
 
-``` bash
+```bash
 composer test
 ```
 

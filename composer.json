@@ -7,7 +7,8 @@
         "email",
         "signature",
         "windows",
-        "php_outlook_signature"
+        "php_outlook_signature",
+        "office365"
     ],
     "homepage": "https://github.com/pforret/php_outlook_signature",
     "license": "MIT",
@@ -34,7 +35,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Pforret\\PhpOutlookSignature\\Tests": "tests"
+            "Pforret\\PhpOutlookSignature\\Tests\\": "tests"
         }
     },
     "scripts": {

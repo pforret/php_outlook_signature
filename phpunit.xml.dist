@@ -3,14 +3,14 @@
          backupGlobals="false"
          backupStaticAttributes="false"
          colors="true"
-         verbose="true"
+         verbose="false"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Spatie Test Suite">
+        <testsuite name="Pforret Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
