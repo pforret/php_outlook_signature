@@ -11,7 +11,6 @@ class PhpOutlookSignature
     private string $template_file="";      //<template>/<message>.htm
     private string $assets_folder="";      //<template>/<message>_files/
     private string $assets_local="";       //<message>_files
-    private string $last_error='';
     private array $keywords=Array();
     private array $included_files=Array();
     private bool $is_ready=false;
@@ -20,17 +19,15 @@ class PhpOutlookSignature
     {
         $this->is_ready=false;
         $this->last_error="";
-        $this->default_template = "__DIR__/templates/default";
+        $this->default_template = __DIR__ . "/templates/default";
         if (! file_exists($this->default_template)) {
-            $this->last_error=sprintf("Default template folder [%s] does not exist", $this->default_template);
             throw new Exception(sprintf("Default template folder [%s] does not exist", $this->default_template));
         }
         if (! $folder) {
             $folder = $this->default_template;
         }
-        if (! file_exists($this->template_folder)) {
-            $this->last_error=sprintf("Template folder [%s] does not exist", $this->template_folder);
-            throw new Exception(sprintf("Template folder [%s] does not exist", $this->template_folder));
+        if (! file_exists($folder)) {
+            throw new Exception(sprintf("Template folder [%s] does not exist", $folder));
         }
         $this->template_folder = $folder;
         $this->check_template_files($this->template_folder);
@@ -40,12 +37,6 @@ class PhpOutlookSignature
         $this->analyze_template_text();
 
         $this->is_ready=true;
-        return $this;
-    }
-
-    public function get_error(): string
-    {
-        return $this->last_error;
     }
 
     private function check_template_files(string $folder): bool
@@ -77,14 +68,15 @@ class PhpOutlookSignature
         $this->included_files = [];
         $text = file_get_contents($this->template_file);
         $text = str_replace($this->assets_local."/", "{assets}/", $text);
-        preg_match_all("|\{(\w+)\}|", $text, $matches);
+        preg_match_all("|\{(\w+)\}|", $text, $matches,PREG_SET_ORDER);
         foreach ($matches as $match) {
             $keyword = $match[1];
             $this->keywords[$keyword] = $keyword;
         }
-        preg_match_all("|({assets}/\w+\.\w+)|", $text, $matches);
+        preg_match_all("|({assets}/\w+\.\w+)|", $text, $matches,PREG_SET_ORDER);
         foreach ($matches as $match) {
             $file = $match[1];
+            $file=str_replace("{assets}",$this->assets_folder,$file);
             $this->included_files[$file] = $file;
         }
         return true;
@@ -92,24 +84,28 @@ class PhpOutlookSignature
 
     public function get_keywords(): array
     {
-        return $this->keywords;
+        return array_keys($this->keywords);
     }
 
     public function get_assets(): array
     {
-        return $this->included_files;
+        return array_keys($this->included_files);
     }
 
     public function create(string $output_file, array $values, bool $ignore_errors = false): bool
     {
         $output_folder = dirname($output_file);
         $output_name = pathinfo($output_file, PATHINFO_FILENAME);
-        $assets_folder = "$output_folder/${output_name}_files";
+        $assets_folder_name="${output_name}_files";
+        $assets_folder = "$output_folder/$assets_folder_name";
         if (! file_exists($output_folder)) {
             mkdir($output_folder, 0777, true);
         }
         if (! file_exists($assets_folder)) {
             mkdir($assets_folder, 0777, true);
+        }
+        if(!isset($values["assets"])){
+            $values["assets"]=$assets_folder_name;
         }
         // fill in template
 
@@ -119,11 +115,12 @@ class PhpOutlookSignature
                 throw new Exception("Template expects [$keyword] but none was given");
             }
             $value = isset($values[$keyword]) ? $values[$keyword] : "";
-            $text = str_replace($keyword, $value, $text);
+            $text = str_replace('{' . $keyword . '}', $value, $text);
         }
         // save files
         file_put_contents($output_file, $text);
         foreach ($this->included_files as $file) {
+            $file=str_replace("{assets}",$values["assets"],$file);
             $copy_file = "$assets_folder/" . basename($file);
             copy($file, $copy_file);
         }
