@@ -1,6 +1,6 @@
 <?php
 
-namespace Pforret\Outlook;
+namespace Pforret\PhpOutlookSignature;
 
 use Exception;
 
