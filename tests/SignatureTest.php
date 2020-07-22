@@ -57,15 +57,15 @@ class SignatureTest extends TestCase
         }
         $this->assertDirectoryExists($tempdir, 'Cannot create temp folder');
         $params = [
-            'language' => 'en-us',
-            'person_name' => 'Peter Gibbons',
-            'person_function' => 'Programmer',
-            'person_phone' => '+1-234-567890',
-            'person_fax' => '+1-234-999999',
-            'person_mobile' => '+1-666-999999',
-            'company' => 'Initech',
-            'company_url' => 'www.imdb.com/title/tt0151804/',
-            'company_domain' => 'www.initech.con',
+            'language'          => 'en-us',
+            'person_name'       => 'Peter Gibbons',
+            'person_function'   => 'Programmer',
+            'person_phone'      => '+1-234-567890',
+            'person_fax'        => '+1-234-999999',
+            'person_mobile'     => '+1-666-999999',
+            'company'           => 'Initech',
+            'company_url'       => 'www.imdb.com/title/tt0151804/',
+            'company_domain'    => 'www.initech.con',
         ];
         $sign->create("$tempdir/message.htm", $params);
         $message = file_get_contents("$tempdir/message.htm");
