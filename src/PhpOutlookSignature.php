@@ -19,18 +19,18 @@ class PhpOutlookSignature
     {
         $this->is_ready = false;
         $this->default_template = __DIR__ . '/templates/default';
-        if (! file_exists($this->default_template)) {
+        if (!file_exists($this->default_template)) {
             throw new Exception(sprintf("Default template folder [%s] does not exist", $this->default_template));
         }
-        if (! $folder) {
+        if (!$folder) {
             $folder = $this->default_template;
         }
-        if (! file_exists($folder)) {
+        if (!file_exists($folder)) {
             throw new Exception(sprintf("Template folder [%s] does not exist", $folder));
         }
         $this->template_folder = $folder;
         $this->check_template_files($this->template_folder);
-        if (! file_exists($this->assets_folder."/filelist.xml")) {
+        if (!file_exists($this->assets_folder."/filelist.xml")) {
             $this->create_filelist();
         }
         $this->analyze_template_text();
@@ -50,7 +50,7 @@ class PhpOutlookSignature
         $this->template_file = $html_files[0];
         $template_name = basename($this->template_file, '.htm');
         $assets_folder = sprintf("%s/%s", $this->template_folder, "${template_name}_files");
-        if (! is_dir($assets_folder)) {
+        if (!is_dir($assets_folder)) {
             // TODO: look for alternative folder name in template
             throw new Exception(sprintf("Template assets folder [%s] cannot be found", $assets_folder));
             // most probable
@@ -98,20 +98,20 @@ class PhpOutlookSignature
         $output_name = pathinfo($output_file, PATHINFO_FILENAME);
         $assets_folder_name = "${output_name}_files";
         $assets_folder = "$output_folder/$assets_folder_name";
-        if (! file_exists($output_folder)) {
+        if (!file_exists($output_folder)) {
             mkdir($output_folder, 0777, true);
         }
-        if (! file_exists($assets_folder)) {
+        if (!file_exists($assets_folder)) {
             mkdir($assets_folder, 0777, true);
         }
-        if (! isset($values['assets'])) {
+        if (!isset($values['assets'])) {
             $values['assets'] = $assets_folder_name;
         }
         // fill in template
 
         $text = file_get_contents($this->template_file);
         foreach ($this->keywords as $keyword) {
-            if (! $ignore_errors && ! isset($values[$keyword])) {
+            if (!$ignore_errors && !isset($values[$keyword])) {
                 throw new Exception("Template expects [$keyword] but none was given");
             }
             $value = isset($values[$keyword]) ? $values[$keyword] : "";
