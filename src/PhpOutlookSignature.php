@@ -29,10 +29,8 @@ class PhpOutlookSignature
         if (! $folder) {
             $folder = $this->default_template;
         }
-        if (! file_exists($this->template_folder)) {
-            $this->last_error = sprintf("Template folder [%s] does not exist", $this->template_folder);
-
-            throw new Exception(sprintf("Template folder [%s] does not exist", $this->template_folder));
+        if (! file_exists($folder)) {
+            throw new Exception(sprintf("Template folder [%s] does not exist", $folder));
         }
         $this->template_folder = $folder;
         $this->check_template_files($this->template_folder);
