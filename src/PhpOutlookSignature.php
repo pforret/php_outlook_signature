@@ -16,14 +16,14 @@ class PhpOutlookSignature
 
     public function __construct($folder = "")
     {
-        $this->default_template="__DIR__/templates/default";
-        if(!file_exists($this->default_template)){
+        $this->default_template = "__DIR__/templates/default";
+        if (! file_exists($this->default_template)) {
             throw new Exception(sprintf("Default template folder [%s] does not exist", $this->default_template));
         }
         if (! $folder) {
             $folder = $this->default_template;
         }
-        if(!file_exists($this->template_folder)) {
+        if (! file_exists($this->template_folder)) {
             throw new Exception(sprintf("Template folder [%s] does not exist", $this->template_folder));
         }
         $this->template_folder = $folder;
@@ -38,12 +38,12 @@ class PhpOutlookSignature
 
     private function check_template_files($folder)
     {
-        $html_files=glob("$folder/*.htm");
-        if(count($html_files) === 0){
+        $html_files = glob("$folder/*.htm");
+        if (count($html_files) === 0) {
             throw new Exception(sprintf("Template folder [%s] does not contain a .htm file", $this->template_folder));
         }
-        if(count($html_files) > 1){
-            throw new Exception(sprintf("Template folder [%s] should only contain 1 .htm file (now: %d)", $this->template_folder,count($html_files)));
+        if (count($html_files) > 1) {
+            throw new Exception(sprintf("Template folder [%s] should only contain 1 .htm file (now: %d)", $this->template_folder, count($html_files)));
         }
 
         $this->template_file = $html_files[0];
@@ -89,12 +89,13 @@ class PhpOutlookSignature
         }
         // fill in template
 
-        $text=file_get_contents($this->template_file);
-        foreach($this->keywords as $keyword){
-            if(!$ignore_errors && !isset($values[$keyword]))
+        $text = file_get_contents($this->template_file);
+        foreach ($this->keywords as $keyword) {
+            if (! $ignore_errors && ! isset($values[$keyword])) {
                 throw new Exception("Template expects [$keyword] but none was given");
-            $value=isset($values[$keyword]) ? $values[$keyword] : "";
-            $text=str_replace($keyword,$value,$text);
+            }
+            $value = isset($values[$keyword]) ? $values[$keyword] : "";
+            $text = str_replace($keyword, $value, $text);
         }
         // save files
         file_put_contents($output_file, $text);
