@@ -6,28 +6,32 @@ use Exception;
 
 class PhpOutlookSignature
 {
-    private string $default_template="";
-    private string $template_folder="";    //<template>
-    private string $template_file="";      //<template>/<message>.htm
-    private string $assets_folder="";      //<template>/<message>_files/
-    private string $assets_local="";       //<message>_files
-    private array $keywords=Array();
-    private array $included_files=Array();
-    private bool $is_ready=false;
+    private string $default_template = "";
+    private string $template_folder = "";    //<template>
+    private string $template_file = "";      //<template>/<message>.htm
+    private string $assets_folder = "";      //<template>/<message>_files/
+    private string $assets_local = "";       //<message>_files
+    private string $last_error = '';
+    private array $keywords = [];
+    private array $included_files = [];
+    private bool $is_ready = false;
 
     public function __construct(string $folder = "")
     {
-        $this->is_ready=false;
-        $this->last_error="";
-        $this->default_template = __DIR__ . "/templates/default";
+        $this->is_ready = false;
+        $this->last_error = "";
+        $this->default_template = "__DIR__/templates/default";
         if (! file_exists($this->default_template)) {
+            $this->last_error = sprintf("Default template folder [%s] does not exist", $this->default_template);
             throw new Exception(sprintf("Default template folder [%s] does not exist", $this->default_template));
         }
         if (! $folder) {
             $folder = $this->default_template;
         }
-        if (! file_exists($folder)) {
-            throw new Exception(sprintf("Template folder [%s] does not exist", $folder));
+        if (! file_exists($this->template_folder)) {
+            $this->last_error = sprintf("Template folder [%s] does not exist", $this->template_folder);
+
+            throw new Exception(sprintf("Template folder [%s] does not exist", $this->template_folder));
         }
         $this->template_folder = $folder;
         $this->check_template_files($this->template_folder);
@@ -35,8 +39,12 @@ class PhpOutlookSignature
             $this->create_filelist();
         }
         $this->analyze_template_text();
+        $this->is_ready = true;
+    }
 
-        $this->is_ready=true;
+    public function get_error(): string
+    {
+        return $this->last_error;
     }
 
     private function check_template_files(string $folder): bool
@@ -59,6 +67,7 @@ class PhpOutlookSignature
         }
         $this->assets_folder = $assets_folder;
         $this->assets_local = basename($assets_folder);
+
         return true;
     }
 
@@ -79,6 +88,7 @@ class PhpOutlookSignature
             $file=str_replace("{assets}",$this->assets_folder,$file);
             $this->included_files[$file] = $file;
         }
+
         return true;
     }
 
@@ -132,6 +142,7 @@ class PhpOutlookSignature
             $script = str_replace("{destin}", "%APPDATA%\Microsoft\Signatures", $script);
             file_put_contents($install_script, $script);
         }
+
         return true;
     }
 
@@ -147,6 +158,7 @@ class PhpOutlookSignature
         $filelist = "$this->assets_folder/filelist.xml";
         file_put_contents($filelist, $xml);
         $this->included_files[$filelist] = $filelist;
+
         return true;
     }
 }
