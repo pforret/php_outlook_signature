@@ -19,18 +19,18 @@ class PhpOutlookSignature
     {
         $this->is_ready = false;
         $this->default_template = __DIR__ . '/templates/default';
-        if (! file_exists($this->default_template)) {
+        if (!file_exists($this->default_template)) {
             throw new Exception(sprintf("Default template folder [%s] does not exist", $this->default_template));
         }
         if (! $folder) {
             $folder = $this->default_template;
         }
-        if (! file_exists($folder)) {
+        if (!file_exists($folder)) {
             throw new Exception(sprintf("Template folder [%s] does not exist", $folder));
         }
         $this->template_folder = $folder;
         $this->check_template_files($this->template_folder);
-        if (! file_exists($this->assets_folder."/filelist.xml")) {
+        if (!file_exists($this->assets_folder."/filelist.xml")) {
             $this->create_filelist();
         }
         $this->analyze_template_text();
@@ -50,7 +50,7 @@ class PhpOutlookSignature
         $this->template_file = $html_files[0];
         $template_name = basename($this->template_file, '.htm');
         $assets_folder = sprintf("%s/%s", $this->template_folder, "${template_name}_files");
-        if (! is_dir($assets_folder)) {
+        if (!is_dir($assets_folder)) {
             // TODO: look for alternative folder name in template
             throw new Exception(sprintf("Template assets folder [%s] cannot be found", $assets_folder));
             // most probable
