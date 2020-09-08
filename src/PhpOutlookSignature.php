@@ -37,6 +37,53 @@ class PhpOutlookSignature
         $this->is_ready = true;
     }
 
+    public function create(string $output_file, array $values, bool $ignore_errors = false): bool
+    {
+        $output_folder = dirname($output_file);
+        $output_name = pathinfo($output_file, PATHINFO_FILENAME);
+        $assets_folder_name = "${output_name}_files";
+        $assets_folder = "$output_folder/$assets_folder_name";
+        if (!file_exists($output_folder)) {
+            mkdir($output_folder, 0777, true);
+        }
+        if (!file_exists($assets_folder)) {
+            mkdir($assets_folder, 0777);
+        }
+        if (!isset($values['assets'])) {
+            $values['assets'] = $assets_folder_name;
+        }
+        // fill in template
+
+        $text = file_get_contents($this->template_file);
+        foreach ($this->keywords as $keyword) {
+            if (!$ignore_errors && !isset($values[$keyword])) {
+                throw new Exception("Template expects [$keyword] but none was given");
+            }
+            $value = isset($values[$keyword]) ? $values[$keyword] : "";
+            $text = str_replace('{' . $keyword . '}', $value, $text);
+        }
+        // save files
+        file_put_contents($output_file, $text);
+        foreach ($this->included_files as $file) {
+            $file = str_replace('{assets}', $values['assets'], $file);
+            $copy_file = "$assets_folder/" . basename($file);
+            copy($file, $copy_file);
+        }
+        $this->prepare_script($this->template_folder.'/install_windows.cmd',$output_folder,'%APPDATA%\Microsoft\Signatures');
+        // TODO: install script for MacOS
+        return true;
+    }
+
+    // ---------------------------- PRIVATE METHODS
+
+    private function prepare_script($input_file,$output_folder,$destination){
+        if(!file_exists($input_file)) return false;
+        $install_script = $output_folder."/".basename($input_file);
+        $script = file_get_contents($input_file);
+        $script = str_replace('{destin}', $destination, $script);
+        file_put_contents($install_script, $script);
+    }
+
     private function check_template_files(string $folder): bool
     {
         $html_files = glob("$folder/*.htm");
@@ -90,50 +137,6 @@ class PhpOutlookSignature
     public function get_assets(): array
     {
         return array_keys($this->included_files);
-    }
-
-    public function create(string $output_file, array $values, bool $ignore_errors = false): bool
-    {
-        $output_folder = dirname($output_file);
-        $output_name = pathinfo($output_file, PATHINFO_FILENAME);
-        $assets_folder_name = "${output_name}_files";
-        $assets_folder = "$output_folder/$assets_folder_name";
-        if (!file_exists($output_folder)) {
-            mkdir($output_folder, 0777, true);
-        }
-        if (!file_exists($assets_folder)) {
-            mkdir($assets_folder, 0777, true);
-        }
-        if (!isset($values['assets'])) {
-            $values['assets'] = $assets_folder_name;
-        }
-        // fill in template
-
-        $text = file_get_contents($this->template_file);
-        foreach ($this->keywords as $keyword) {
-            if (!$ignore_errors && !isset($values[$keyword])) {
-                throw new Exception("Template expects [$keyword] but none was given");
-            }
-            $value = isset($values[$keyword]) ? $values[$keyword] : "";
-            $text = str_replace('{' . $keyword . '}', $value, $text);
-        }
-        // save files
-        file_put_contents($output_file, $text);
-        foreach ($this->included_files as $file) {
-            $file = str_replace('{assets}', $values['assets'], $file);
-            $copy_file = "$assets_folder/" . basename($file);
-            copy($file, $copy_file);
-        }
-        $install_template = $this->template_folder.'/install_signature.cmd';
-        $install_script = $output_folder."/".basename($install_template);
-        if (file_exists($install_template)) {
-            $script = file_get_contents($install_template);
-            $script = str_replace('{source}', "$output_folder", $script);
-            $script = str_replace('{destin}', '%APPDATA%\Microsoft\Signatures', $script);
-            file_put_contents($install_script, $script);
-        }
-
-        return true;
     }
 
     private function create_filelist(): bool
