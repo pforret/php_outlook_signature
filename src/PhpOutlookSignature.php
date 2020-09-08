@@ -69,15 +69,18 @@ class PhpOutlookSignature
             $copy_file = "$assets_folder/" . basename($file);
             copy($file, $copy_file);
         }
-        $this->prepare_script($this->template_folder.'/install_windows.cmd',$output_folder,'%APPDATA%\Microsoft\Signatures');
+        $this->prepare_script($this->template_folder.'/install_windows.cmd', $output_folder, '%APPDATA%\Microsoft\Signatures');
         // TODO: install script for MacOS
         return true;
     }
 
     // ---------------------------- PRIVATE METHODS
 
-    private function prepare_script($input_file,$output_folder,$destination){
-        if(!file_exists($input_file)) return false;
+    private function prepare_script($input_file, $output_folder, $destination)
+    {
+        if (!file_exists($input_file)) {
+            return false;
+        }
         $install_script = $output_folder."/".basename($input_file);
         $script = file_get_contents($input_file);
         $script = str_replace('{destin}', $destination, $script);
