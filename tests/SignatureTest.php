@@ -10,24 +10,24 @@ class SignatureTest extends TestCase
     public function test_template_not_exist()
     {
         $this->expectExceptionMessage('does not exist');
-        $sign = new PhpOutlookSignature(__DIR__ . '/templates/does_not_exist');
+        $sign = new PhpOutlookSignature(__DIR__.'/templates/does_not_exist');
     }
 
     public function test_template_empty()
     {
         $this->expectExceptionMessage('does not contain');
-        $sign = new PhpOutlookSignature(__DIR__ . '/templates/empty');
+        $sign = new PhpOutlookSignature(__DIR__.'/templates/empty');
     }
 
     public function test_template_no_assets()
     {
         $this->expectExceptionMessage('cannot be found');
-        $sign = new PhpOutlookSignature(__DIR__ . '/templates/no_assets');
+        $sign = new PhpOutlookSignature(__DIR__.'/templates/no_assets');
     }
 
     public function test_template_valid()
     {
-        $sign = new PhpOutlookSignature(__DIR__ . '/templates/valid');
+        $sign = new PhpOutlookSignature(__DIR__.'/templates/valid');
         $this->assertTrue(isset($sign), 'PhpOutlookSignature not initialised');
         $this->assertTrue(count($sign->get_assets()) > 0, 'Assets not found');
         $this->assertTrue(count($sign->get_keywords()) > 0, 'Keywords not found');
@@ -36,9 +36,9 @@ class SignatureTest extends TestCase
 
     public function test_signature_no_values()
     {
-        $sign = new PhpOutlookSignature(__DIR__ . '/templates/valid');
-        $tempdir = sys_get_temp_dir() . '/SignatureTest';
-        if (!file_exists($tempdir)) {
+        $sign = new PhpOutlookSignature(__DIR__.'/templates/valid');
+        $tempdir = sys_get_temp_dir().'/SignatureTest';
+        if (! file_exists($tempdir)) {
             mkdir($tempdir);
         }
         $this->assertDirectoryExists($tempdir, 'Cannot create temp folder');
@@ -50,9 +50,9 @@ class SignatureTest extends TestCase
 
     public function test_signature_with_values()
     {
-        $sign = new PhpOutlookSignature(__DIR__ . '/templates/valid');
-        $tempdir = sys_get_temp_dir() . '/SignatureTest';
-        if (!file_exists($tempdir)) {
+        $sign = new PhpOutlookSignature(__DIR__.'/templates/valid');
+        $tempdir = sys_get_temp_dir().'/SignatureTest';
+        if (! file_exists($tempdir)) {
             mkdir($tempdir);
         }
         $this->assertDirectoryExists($tempdir, 'Cannot create temp folder');

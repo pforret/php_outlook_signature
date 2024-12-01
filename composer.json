@@ -21,10 +21,10 @@
         }
     ],
     "require": {
-        "php": "^7.4"
+        "php": ">=7.4"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.16",
+        "laravel/pint": "^1.18",
         "phpstan/phpstan": "^0.12.33",
         "phpunit/phpunit": "^9.0",
         "vimeo/psalm": "^3.11"
@@ -43,7 +43,7 @@
         "psalm": "vendor/bin/psalm",
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
-        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+        "format": "vendor/bin/pint"
     },
     "config": {
         "sort-packages": true
